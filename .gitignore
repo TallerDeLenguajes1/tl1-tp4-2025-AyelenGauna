@@ -1,0 +1,57 @@
+ignorado.txt
+
+tp1_1.exe
+
+### C ###
+# Requisitos previos
+*.d
+
+# Archivos de objeto
+*.o
+*.ko
+*.obj
+*.duende
+
+# Salida del enlazador
+*.ilk
+*.mapa
+*.exp
+
+# Encabezados precompilados
+*.gch
+*.pch
+
+# Bibliotecas
+*.lib
+*.a
+*.la
+*.lo
+
+# Objetos compartidos (incluidas las DLL de Windows)
+*.dll
+*.entonces
+*.entonces.*
+*.dylib
+
+# Ejecutables
+*.exe
+*.afuera
+*.aplicación
+*.i*86
+*.x86_64
+*.maleficio
+
+# Archivos de depuración
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Resultados de la compilación del módulo del kernel
+*.mod*
+*.cmd
+.tmp_versions/
+módulos.orden
+Módulo.symvers
+Archivo mk.old
+dkms.conf
