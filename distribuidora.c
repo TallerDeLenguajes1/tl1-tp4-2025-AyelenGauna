@@ -25,13 +25,13 @@ Nodo *crearNodo(char *desc, int duracion, int id){
 
     return nuevo;
 }
-void tareasPendientes(Nodo **start, Nodo *Nodo){
+void insertarNodo(Nodo **start, Nodo *Nodo){
     Nodo->Siguiente= *start;
     *start=Nodo;
 }
 
 void mostrarTareas( Nodo *pendientes){
-   printf("------TAREAS PENDIENTES------");
+   
     while (pendientes!=NULL)
     {
         printf("\nID:%d  //  Descripcion:%s //Duracion:%d", pendientes->T.TareaID, pendientes->T.Descripcion, pendientes->T.Duracion);
@@ -40,6 +40,40 @@ void mostrarTareas( Nodo *pendientes){
     }
     
 }
+
+
+Nodo *buscarNodo(Nodo *start, int idBuscado){
+    Nodo * Aux = start;
+    while(Aux && Aux->T.TareaID != idBuscado)  
+    {
+        Aux = Aux->Siguiente;
+    }
+    return Aux;
+}
+
+
+void QuitarNodo(Nodo **start, int id) {
+    Nodo *aux = *start;
+    Nodo *prev = NULL;
+    
+    // Buscamos el nodo a eliminar
+    while (aux != NULL && aux->T.TareaID != id) {
+        prev = aux;
+        aux = aux->Siguiente;
+    }
+
+    // Si encontramos el nodo
+    if (aux != NULL) {
+        if (prev == NULL) { 
+            *start = aux->Siguiente;  
+        } else {
+            prev->Siguiente = aux->Siguiente;  
+        }
+
+        
+    }
+}
+
 int main (){
     Nodo *pendientes=NULL;
     int id=1000;
@@ -57,14 +91,29 @@ int main (){
         scanf("%d", &duracion);
 
         Nodo *new=crearNodo(desc, duracion, id++);
-        tareasPendientes(&pendientes, new);
+        insertarNodo(&pendientes, new);
 
         printf("¿Quiere otra tarea pediente?(1-SI  0-NO)");
         scanf("%d", &aux);
-        cont++;
+        
 
     } while (aux!=0);
+    printf("------TAREAS PENDIENTES------");
     mostrarTareas( pendientes);
+    Nodo *realizadas=NULL;
+    int busqueda;
+    
+    printf("Ingrese el ID de la tarea que ya fue realizada: ");
+    scanf("%d", &busqueda);
+    Nodo *encontrado = buscarNodo(pendientes, busqueda);
+        
+    insertarNodo(&realizadas, encontrado);
+    QuitarNodo(&pendientes, busqueda);  // Pasamos &pendientes para modificar correctamente
+      
+    printf("------TAREAS REALIZADAS------");
+    mostrarTareas(realizadas);
+
+    
 
     return 0;
 }
