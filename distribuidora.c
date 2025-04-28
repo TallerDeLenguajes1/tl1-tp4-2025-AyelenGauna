@@ -15,8 +15,8 @@ int main(){
 
         printf("\nDescripcion: ");
         fgets(descripcion,TAMA,stdin);
-        //descripcion[strcspn(descripcion, "\n")] = '\0';
-
+        descripcion[strcspn(descripcion, "\n")] = '\0';
+        
         do
         {
             printf("Duracion (10min min a 100min max): ");
@@ -51,8 +51,7 @@ int main(){
             if (opcion == 1)
             {
                 tareaID++;
-            }
-            
+            }     
             
         } while (opcion !=1 && opcion !=0);   
 
@@ -60,8 +59,6 @@ int main(){
     
     // inicializo "opcion" en 1
     opcion = 1;
-
-    printf("\nID DE LA ULTIMA TAREA: %d", tareaID);
 
     //***** INTERFAZ PARA MOVER TAREAS PENDIENTES A TAREAS REALIZADAS *****
     printf("\n--- TAREAS REALIZADAS ---\n");
@@ -89,15 +86,12 @@ int main(){
             }
                      
         } while (1000 > tareaRealizadaID || tareaRealizadaID > tareaID || tareaRealizadaID == tareaRealizada);
-        
-        
 
-        Nodo * NTareaR = BuscarTarea(ListaTareasPendientes,tareaRealizadaID);
-    
+        Nodo * NTareaR = QuitarTarea(&ListaTareasPendientes,tareaRealizadaID);
+        
+        //Nodo * NTareaR = BuscarTarea(ListaTareasPendientes,tareaRealizadaID);
+        
         InsertarTareaAlFinal(&ListaTareasRealizadas,NTareaR);
-
-        Nodo * EliminarTarea = QuitarTarea(&ListaTareasPendientes,tareaRealizadaID);
-        EliminarTareaDeLista(EliminarTarea);
         
         printf("\nSe realizo alguna otra tarea");
         do
@@ -114,7 +108,9 @@ int main(){
         } while (opcion !=1 && opcion !=0);
 
     } while (opcion);
-    
+
+    MostrarListas(ListaTareasPendientes,ListaTareasRealizadas);
+
     return 0;
 }
 

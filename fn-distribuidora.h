@@ -22,14 +22,16 @@ void InsertarTareaAlFinal (Nodo ** ListaTareas, Nodo * NuevaTarea);
 Nodo * BuscarTarea (Nodo * ListaTareas, int tareaID);
 Nodo * QuitarTarea (Nodo ** ListaTareas, int tareaID);
 void EliminarTareaDeLista (Nodo * Tarea);
+void MostrarListas (Nodo *ListaTareasPendientes, Nodo * ListaTareasRealizadas);
 
 // ***** FUNCIONES *****
 Nodo * NuevaTarea (int tareaID, char *descripcion, int duracion){
     Nodo * NTarea;
     NTarea = (Nodo *)malloc(sizeof(Nodo));
     NTarea->T.TareaID = tareaID;
-    NTarea->T.Descripcion = descripcion;
+    NTarea->T.Descripcion = strdup(descripcion);
     NTarea->T.Duracion = duracion;
+    NTarea->Siguiente = NULL;
 
     return NTarea;
 }
@@ -91,4 +93,21 @@ void EliminarTareaDeLista (Nodo * Tarea){
     {
         free(Tarea);
     }
+}
+
+void MostrarListas (Nodo *ListaTareasPendientes, Nodo * ListaTareasRealizadas){
+
+    printf("\n--- LISTA DE TAREAS PENDIENTES ---\n");
+    while (ListaTareasPendientes)
+    {
+        printf("\nTAREA %d\nDescripcion: %s\tDuracion: %d",ListaTareasPendientes->T.TareaID,ListaTareasPendientes->T.Descripcion,ListaTareasPendientes->T.Duracion);
+        ListaTareasPendientes = ListaTareasPendientes->Siguiente;
+    }
+
+    printf("\n--- LISTA DE TAREAS REALIZADAS ---\n");
+    while (ListaTareasRealizadas)
+    {
+        printf("\nTAREA %d\nDescripcion: %s\tDuracion: %d\n", ListaTareasRealizadas->T.TareaID,ListaTareasRealizadas->T.Descripcion,ListaTareasRealizadas->T.Duracion);
+        ListaTareasRealizadas = ListaTareasRealizadas->Siguiente;
+    } 
 }
