@@ -1,30 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#define TAMA 100
-
-typedef struct { 
-    int TareaID;//Numérico autoincremental comenzando en 1000 
-    char *Descripcion;       
-    int Duracion; // entre 10 – 100  
-}Tarea;  
-
-typedef struct Nodo{
-    Tarea T;
-    struct Nodo * Siguiente;
-}Nodo;
-
-Nodo * NuevaTarea (int tareaID, char *descripcion, int duracion);
-void InsertarTareaAlFinal (Nodo ** ListaTareasPendientes, Nodo * NuevaTarea);
+#include "fn-distribuidora.h"
 
 int main(){
 
     Nodo * ListaTareasPendientes = NULL, * ListaTareasRealizadas = NULL;
-    int tareaID = 1000, duracion, newTarea = 1;
+    int tareaID = 1000, duracion, opcion = 1, tareaRealizadaID = 0, tareaRealizada;
     char * descripcion;
     descripcion = (char *)malloc(TAMA * sizeof(char));
 
+    //***** INTERFAZ PARA CARGAR TAREAS *****
     printf("--- CARGAR TAREAS ---\n");
     do
     {
@@ -32,11 +15,11 @@ int main(){
 
         printf("\nDescripcion: ");
         fgets(descripcion,TAMA,stdin);
-        descripcion[strcspn(descripcion, "\n")] = '\0';
+        //descripcion[strcspn(descripcion, "\n")] = '\0';
 
         do
         {
-            printf("\nDuracion (10min min a 100min max: ");
+            printf("Duracion (10min min a 100min max): ");
             scanf("%d", &duracion);
             while (getchar() != '\n');
 
@@ -48,59 +31,90 @@ int main(){
             {
                 printf("\nNO puede ingresar MENOS de lo solicitado\n");
             }    
-        } while (duracion > 100 || 10 > duracion);
-        
-       
+        } while (duracion > 100 || 10 > duracion);  
 
-        Nodo * Tareas = NuevaTarea(tareaID,descripcion,duracion);
+        Nodo * NTareaP = NuevaTarea(tareaID,descripcion,duracion);
         
-        InsertarTareaAlFinal(&ListaTareasPendientes,Tareas);
+        InsertarTareaAlFinal(&ListaTareasPendientes,NTareaP);
 
         printf("\nDesea ingresar una nueva tarea o finalizar la carga");
         do
         {
             printf("\nAGREGAR=1\tFINALIZAR=0\n");
-            scanf("%d", &newTarea);
+            scanf("%d", &opcion);
             while (getchar() != '\n');
 
-            if (newTarea !=1 && newTarea !=0)
+            if (opcion !=1 && opcion !=0)
+            {
+                printf("\nOpcion incorrecta\n");
+            }
+            if (opcion == 1)
+            {
+                tareaID++;
+            }
+            
+            
+        } while (opcion !=1 && opcion !=0);   
+
+    } while (opcion);
+    
+    // inicializo "opcion" en 1
+    opcion = 1;
+
+    printf("\nID DE LA ULTIMA TAREA: %d", tareaID);
+
+    //***** INTERFAZ PARA MOVER TAREAS PENDIENTES A TAREAS REALIZADAS *****
+    printf("\n--- TAREAS REALIZADAS ---\n");
+    do
+    {
+       do
+       {
+            tareaRealizada = tareaRealizadaID;
+
+            printf("\nIngrese el ID de la tarea que ya se realizo: ");
+            scanf("%d",&tareaRealizadaID);
+            while (getchar() != '\n');
+            
+            if (1000 > tareaRealizadaID)
+            {
+                printf("\nEl ID de las tareas son de 1000 en adelante\n");
+
+            }else if (tareaRealizadaID > tareaID)
+            {
+                printf("\nEl ID ingresado no existe\n");
+
+            }else if (tareaRealizadaID == tareaRealizada)
+            {
+                printf("\nEl ID ingresado ya se encuentra en la lista de tareas realizadas\n");
+            }
+                     
+        } while (1000 > tareaRealizadaID || tareaRealizadaID > tareaID || tareaRealizadaID == tareaRealizada);
+        
+        
+
+        Nodo * NTareaR = BuscarTarea(ListaTareasPendientes,tareaRealizadaID);
+    
+        InsertarTareaAlFinal(&ListaTareasRealizadas,NTareaR);
+
+        Nodo * EliminarTarea = QuitarTarea(&ListaTareasPendientes,tareaRealizadaID);
+        EliminarTareaDeLista(EliminarTarea);
+        
+        printf("\nSe realizo alguna otra tarea");
+        do
+        {
+            printf("\nSI=1\tNO=0\n");
+            scanf("%d", &opcion);
+            while (getchar() != '\n');
+
+            if (opcion !=1 && opcion !=0)
             {
                 printf("\nOpcion incorrecta\n");
             }
             
-        } while (newTarea !=1 && newTarea !=0);
-        
-        
+        } while (opcion !=1 && opcion !=0);
 
-        tareaID++;
-    } while (newTarea);
+    } while (opcion);
     
-
     return 0;
 }
 
-Nodo * NuevaTarea (int tareaID, char *descripcion, int duracion){
-    Nodo * NTarea;
-    NTarea = (Nodo *)malloc(sizeof(Nodo));
-    NTarea->T.TareaID = tareaID;
-    NTarea->T.Descripcion = descripcion;
-    NTarea->T.Duracion = duracion;
-
-    return NTarea;
-}
-
-void InsertarTareaAlFinal (Nodo ** ListaTareasPendientes, Nodo * NuevaTarea){
-    
-    if (*ListaTareasPendientes == NULL) {
-        
-        *ListaTareasPendientes = NuevaTarea;
-
-    } else {
-        Nodo * nAux = *ListaTareasPendientes;
-        while (nAux->Siguiente) {
-            nAux = nAux->Siguiente;
-        }
-        nAux->Siguiente = NuevaTarea;
-    }
-    NuevaTarea->Siguiente = NULL;
-}
