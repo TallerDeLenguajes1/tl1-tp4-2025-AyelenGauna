@@ -33,13 +33,18 @@ tp1_1.exe
 *.entonces.*
 *.dylib
 
-# Ejecutables
+# Ignorar configuración de VSCode
+.vscode/
+
+# Executables
 *.exe
-*.afuera
-*.aplicación
+*.out
+*.app
 *.i*86
 *.x86_64
-*.maleficio
+*.hex
+*.o
+*.log
 
 # Archivos de depuración
 *.dSYM/
