@@ -16,7 +16,7 @@ int main(){
         printf("\nDescripcion: ");
         fgets(descripcion,TAMA,stdin);
         descripcion[strcspn(descripcion, "\n")] = '\0';
-        
+
         do
         {
             printf("Duracion (10min min a 100min max): ");
@@ -110,6 +110,62 @@ int main(){
     } while (opcion);
 
     MostrarListas(ListaTareasPendientes,ListaTareasRealizadas);
+
+    printf("\n--- CONSULTAR TAREA ---");
+        do
+        {
+            printf("\nPOR ID: 0\tPOR PALABRA CLAVE: 1\n");
+            scanf("%d",&opcion);
+            while (getchar() != '\n');
+            
+            switch (opcion)
+            {
+                case 0:
+                    int id;
+
+                    // BUSCO UNA TAREA POR SU IDENTIFICADOR Y LA MUESTRA EN PANTALLA
+                    MostrarBuscarTareaPorId (ListaTareasPendientes,ListaTareasRealizadas,id);
+                    
+                    break;
+
+                case 1:
+                    char *palabra_clave;
+                    palabra_clave =(char *)malloc(TAMA * sizeof(char));
+                    // INGRESO UNA PALABRA CLAVE PARA BUSCAR UNA TAREA Y MOSTRARLA EN PANTALLA 
+                    MostrarBuscarTareaPorPalabra(ListaTareasPendientes,ListaTareasRealizadas,palabra_clave);
+                    free(palabra_clave);
+
+                    break;
+            
+                default:
+                    printf("\nOPCION INCORRECTA\n");
+
+                    break;
+            }  
+        
+            printf("\nDesea seguir buscando una tarea");
+            do
+            {
+                printf("\nSI=2\tNO=0\n");
+                scanf("%d",&opcion);
+                while (getchar() != '\n');
+
+                if (opcion != 2 && opcion != 0)
+                {
+                    printf("\nOPCION INCORRECTA\n");
+                }
+
+                if (opcion == 0)
+                {
+                    printf("\n***** HASTA LUEGO *****\n");
+                }  
+                
+            } while (opcion != 2 && opcion != 0);
+
+    } while (opcion != 0 && opcion != 1); 
+
+    LiberarMemoria(ListaTareasPendientes);
+    LiberarMemoria(ListaTareasRealizadas);
 
     return 0;
 }
